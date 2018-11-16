@@ -139,8 +139,17 @@ namespace Yahtzee.Game.MLAgent
             }
 
             SetActionMask(0, _mask);
+
+            //Added to test if the mask can be learned
+            float[] maskObs = new float[_actionTable.Count];
+            for (var maskIndex = 0; maskIndex < _mask.Count; maskIndex++)
+            {
+                maskObs[maskIndex] = _mask[maskIndex];
+            }
+            AddVectorObs(maskObs);
+            // End of code added to test if the mask can be learned
         }
-        
+
         private List<int> _mask;
     
         public override void AgentAction(float[] vectorAction, string textAction)
@@ -176,7 +185,7 @@ namespace Yahtzee.Game.MLAgent
                 Gameboard.SectionBonus;
             float normalizedReward = (scoreCurrentTurn + sectionBonusPercentage) / 50.0f;
             SetReward(normalizedReward);
-            
+            Logger.Log(LogLevel.Debug, "normalizedReward:" + normalizedReward);
             if (_game.IsGameOver()) // gameover
             {
                 EndTraining();
