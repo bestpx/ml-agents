@@ -268,3 +268,10 @@ StudentRecurrentBrain:
     use_recurrent: true
     sequence_length: 32
     buffer_size: 128
+YahtzeeBrain:
+    max_steps: 5.0e20
+    time_horizon: 200
+
+TestBrain:
+    max_steps: 5.0e20
+    time_horizon: 200
