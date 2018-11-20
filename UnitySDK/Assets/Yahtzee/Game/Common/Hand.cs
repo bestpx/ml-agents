@@ -153,9 +153,12 @@ namespace Yahtzee.Game.Common
         public int GetSum()
         {
             int sum = 0;
-            for (int i = 0; i < HandSize; i++)
+            if (HasRolled())
             {
-                sum += _rolls[i].RollValue;
+                for (int i = 0; i < HandSize; i++)
+                {
+                    sum += _rolls[i].RollValue;
+                }
             }
 
             return sum;

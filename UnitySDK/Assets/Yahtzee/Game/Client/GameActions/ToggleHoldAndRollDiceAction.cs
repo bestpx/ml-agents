@@ -3,7 +3,7 @@ using CommonUtil;
 
 namespace Yahtzee.Game.Client.GameActions
 {
-    public class ToggleHoldDiceAction : GameAction
+    public class ToggleHoldAndRollDiceAction : GameAction
     {
         /// <summary>
         /// The toggle status of the hand
@@ -14,7 +14,7 @@ namespace Yahtzee.Game.Client.GameActions
         /// <summary>
         /// Set hand dice lock status to _toggle
         /// </summary>
-        public ToggleHoldDiceAction(bool[] toggle)
+        public ToggleHoldAndRollDiceAction(bool[] toggle)
         {
             _toggle = new bool[toggle.Length];
             for (int i = 0; i < toggle.Length; i++)
@@ -30,8 +30,10 @@ namespace Yahtzee.Game.Client.GameActions
 
         public override void Perform(Common.Game game)
         {
-            Logger.Log(LogLevel.Debug, "hand: " + game.Hand.ToString() + "Toggle: " + GetToggleString());
+            Logger.Log(LogLevel.Debug, "hand: " + game.Hand.ToString() + "Toggle and before roll: " + GetToggleString());
             game.ToggleHand(_toggle);
+            game.Roll();
+            Logger.Log(LogLevel.Debug, "Roll after toggle: " + game.Hand.ToString());
         }
 
         public override void Revert(Common.Game game)

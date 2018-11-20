@@ -77,7 +77,7 @@ namespace Yahtzee.Game.MLAgent
                 {
                     return;
                 }
-                _actionTable.Add(new ToggleHoldDiceAction(localArray));
+                _actionTable.Add(new ToggleHoldAndRollDiceAction(localArray));
                 return;
             }
 
@@ -104,7 +104,7 @@ namespace Yahtzee.Game.MLAgent
             float maxPossible = _game.Gameboard.ShouldHaveYahtzeeBonus() ? 80 : 50;
             for (int i = 1; i < 14; i++)
             {
-                AddVectorObs(_game.GetScoreInCell(i) / maxPossible); // 13
+                AddVectorObs(_game.GetScoreInCell(i) / 50); // 13
             }
            
             // observe hand
@@ -120,6 +120,11 @@ namespace Yahtzee.Game.MLAgent
             for (int i = 1; i < 14; i++)
             {
                 AddVectorObs(_game.CanPlayInCell(i)); // 13
+            }
+            // observe potential scores
+            for (int i = 1; i < 14; i++)
+            {
+                AddVectorObs(_game.GetCell(i).EvaluateScore(_game.Hand, _game.Gameboard)); // 13
             }
             AddVectorObs(_game.CanRoll());
             AddVectorObs(_game.CanToggle());
@@ -141,12 +146,12 @@ namespace Yahtzee.Game.MLAgent
             SetActionMask(0, _mask);
 
             //Added to test if the mask can be learned
-            float[] maskObs = new float[_actionTable.Count];
-            for (var maskIndex = 0; maskIndex < _mask.Count; maskIndex++)
-            {
-                maskObs[maskIndex] = _mask[maskIndex];
-            }
-            AddVectorObs(maskObs);
+            //float[] maskObs = new float[_actionTable.Count];
+            //for (var maskIndex = 0; maskIndex < _mask.Count; maskIndex++)
+            //{
+            //    maskObs[maskIndex] = _mask[maskIndex];
+            //}
+            //AddVectorObs(maskObs);
             // End of code added to test if the mask can be learned
         }
 
@@ -178,12 +183,12 @@ namespace Yahtzee.Game.MLAgent
                 scoreCurrentTurn = scoreAfter - scoreBefore;
                 scoreGainedInLeftColumnWithoutYahtzeeBonus = scoreLeftColumnAfter - leftColumnScoreBefore;
             }
-            
+
             // Reward agent
-            float highestPossible = _game.Gameboard.ShouldHaveYahtzeeBonus() ? 80.0f : 50.0f;
-            float sectionBonusPercentage = (float) scoreGainedInLeftColumnWithoutYahtzeeBonus / Gameboard.SectionBonusThreshold *
-                Gameboard.SectionBonus;
-            float normalizedReward = (scoreCurrentTurn + sectionBonusPercentage) / 50.0f;
+            //float highestPossible = _game.Gameboard.ShouldHaveYahtzeeBonus() ? 80.0f : 50.0f;
+            //float sectionBonusPercentage = (float) scoreGainedInLeftColumnWithoutYahtzeeBonus / Gameboard.SectionBonusThreshold *
+            //    Gameboard.SectionBonus;
+            float normalizedReward = scoreCurrentTurn / 50.0f;
             SetReward(normalizedReward);
             Logger.Log(LogLevel.Debug, "normalizedReward:" + normalizedReward);
             if (_game.IsGameOver()) // gameover
