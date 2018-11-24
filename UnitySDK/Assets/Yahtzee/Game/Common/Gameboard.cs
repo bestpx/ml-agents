@@ -1,3 +1,4 @@
+using CommonUtil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,15 +18,22 @@ namespace Yahtzee.Game.Common
         /// </summary>
         protected Dictionary<int, GameCell> GameCells = new Dictionary<int, GameCell>();
         protected Gameboard(){}
-        
+
+        private ILogger Logger
+        {
+            get { return ServiceFactory.GetService<ILogger>(); }
+        }
+
         #region queries
         public int GetScore()
         {
             int score = GetScoreWithoutSectionBonus();
-            
+            int leftColumnScoreWithoutYahtzeeBonus = GetLeftColumnScoreWithoutYahtzeeBonus();
+            Logger.Log(LogLevel.Debug, "Left column score: " + leftColumnScoreWithoutYahtzeeBonus);
             // section bonus
-            if (GetLeftColumnScoreWithoutYahtzeeBonus() >= SectionBonusThreshold)
+            if (leftColumnScoreWithoutYahtzeeBonus >= SectionBonusThreshold)
             {
+                Logger.Log(LogLevel.Debug, "Section bonus achieved!");
                 score += SectionBonus;
             }
 
@@ -137,6 +145,13 @@ namespace Yahtzee.Game.Common
         }
 
         public int YahtzeeBonus => 50;
+        public bool HasSectionBonus
+        {
+            get
+            {
+                return GetLeftColumnScoreWithoutYahtzeeBonus() > SectionBonusThreshold;
+            }
+        }
         #endregion
         
         #region Actions
