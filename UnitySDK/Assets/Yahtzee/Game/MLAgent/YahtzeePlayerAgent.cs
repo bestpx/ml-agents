@@ -130,9 +130,12 @@ namespace Yahtzee.Game.MLAgent
             AddVectorObs(_game.CanToggle());
             AddVectorObs(_game.Hand.RollCount);
             AddVectorObs(_game.Gameboard.ShouldHaveYahtzeeBonus()); // 4
-            
-            // TODO observe section bonus info
-            
+
+            // observe section bonus info
+            int leftColumnScoreBefore = _game.Gameboard.GetLeftColumnScoreWithoutYahtzeeBonus();
+            AddVectorObs((float)leftColumnScoreBefore / Gameboard.SectionBonusThreshold);
+            AddVectorObs(_game.Gameboard.HasSectionBonus);
+
             // mask actions
             _mask = new List<int>();
             for (int i = 0; i < _actionTable.Count; i++)
