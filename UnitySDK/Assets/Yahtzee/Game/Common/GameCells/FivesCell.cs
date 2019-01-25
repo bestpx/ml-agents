@@ -2,9 +2,9 @@ namespace Yahtzee.Game.Common.GameCells
 {
     public class FivesCell : GameCell
     {
-        public override int EvaluateScore(Hand hand, Gameboard gameboard)
+        public override int EvaluateScore(Hand hand, Gameboard gameboard, bool includeSectionBonus = false)
         {
-            return EvaluateNumberCategoryCell(gameboard, hand, 5);
+            return EvaluateNumberCategoryCell(gameboard, hand, 5, includeSectionBonus);
         }
 
         public override int MeanExpectation(Gameboard gameboard)

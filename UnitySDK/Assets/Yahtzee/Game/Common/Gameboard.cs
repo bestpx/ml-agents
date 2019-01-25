@@ -149,7 +149,7 @@ namespace Yahtzee.Game.Common
         {
             get
             {
-                return GetLeftColumnScoreWithoutYahtzeeBonus() > SectionBonusThreshold;
+                return GetLeftColumnScoreWithoutYahtzeeBonus() >= SectionBonusThreshold;
             }
         }
         #endregion

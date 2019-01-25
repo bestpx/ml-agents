@@ -3,7 +3,7 @@ namespace Yahtzee.Game.Common.GameCells
     public class LargeStraightCell : GameCell
     {
         public const int LargeStraightValue = 40;
-        public override int EvaluateScore(Hand hand, Gameboard gameboard)
+        public override int EvaluateScore(Hand hand, Gameboard gameboard, bool includeSectionBonus)
         {
             int value = 0;
 

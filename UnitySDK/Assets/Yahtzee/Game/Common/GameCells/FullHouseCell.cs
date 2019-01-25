@@ -3,7 +3,7 @@ namespace Yahtzee.Game.Common.GameCells
     public class FullHouseCell : GameCell
     {
         public const int FullHouseValue = 25;
-        public override int EvaluateScore(Hand hand, Gameboard gameboard)
+        public override int EvaluateScore(Hand hand, Gameboard gameboard, bool includeSectionBonus = false)
         {
             int value = 0;
             if (hand.IsFullHouse())

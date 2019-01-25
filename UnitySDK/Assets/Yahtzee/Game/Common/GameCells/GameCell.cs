@@ -18,7 +18,7 @@ namespace Yahtzee.Game.Common.GameCells
         /// Evaluate score by hand and gameboard status
         /// </summary>
         /// <returns></returns>
-        public abstract int EvaluateScore(Hand hand, Gameboard gameboard);
+        public abstract int EvaluateScore(Hand hand, Gameboard gameboard, bool includeSectionBonus = false);
 
         public abstract int MeanExpectation(Gameboard gameboard);
         public abstract int MaximumPossible(Gameboard gameboard);
@@ -41,10 +41,16 @@ namespace Yahtzee.Game.Common.GameCells
         /// <param name="hand"></param>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected int EvaluateNumberCategoryCell(Gameboard gameboard, Hand hand, int number)
+        protected int EvaluateNumberCategoryCell(Gameboard gameboard, Hand hand, int number, bool includeSectionBonus = false)
         {
             int score = hand.GetNumberOfRollsOfValue(number) * number;
             score += YahtzeeBonus(gameboard, hand);
+            // plus section bonus
+            if (includeSectionBonus &&
+                gameboard.GetLeftColumnScoreWithoutYahtzeeBonus() + score >= Gameboard.SectionBonusThreshold)
+            {
+                score += Gameboard.SectionBonus;
+            }
             return score;
         }
 

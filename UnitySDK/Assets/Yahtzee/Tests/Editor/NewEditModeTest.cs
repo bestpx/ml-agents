@@ -13,6 +13,7 @@ public class NewEditModeTest
     [Test]
     public void GameboardTest()
     {
+        ServiceFactory.Register<CommonUtil.ILogger>(new CommonUtil.Logger(LogLevel.Trace));
         var gameboard = GameboardFactory.MakeClassicGameboard();
         var hand = new Hand(new int[]{1,2,3,4,5, 6,6,6,6,6, 1,2,3,4,1, 1,2,3,4,5});
         Assert.IsTrue(gameboard.GetScore() == 0);
@@ -93,6 +94,7 @@ public class NewEditModeTest
     [Test]
     public void GamePlayTest() 
     {
+        ServiceFactory.Register<CommonUtil.ILogger>(new CommonUtil.Logger(LogLevel.Trace));
         // Use the Assert class to test conditions.
         var game = ServiceFactory.GetService<GameService>().CreateNewGame();
         

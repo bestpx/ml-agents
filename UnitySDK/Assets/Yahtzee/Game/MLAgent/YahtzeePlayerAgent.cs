@@ -106,11 +106,16 @@ namespace Yahtzee.Game.MLAgent
             {
                 AddVectorObs(_game.GetScoreInCell(i) / 50); // 13
             }
-           
-            // observe hand
+
+            // observe hand - one-hot fashion
             for (int i = 0; i < 5; i++)
             {
                 AddVectorObs(_game.GetDiceAt(i), 7);  // 7 * 5 = 35
+            }
+            // observe hand values
+            for (int i = 0; i < 5; i++)
+            {
+                AddVectorObs(_game.GetDiceAt(i));  // 5
             }
             for (int i = 0; i < 5; i++)
             {
@@ -124,15 +129,20 @@ namespace Yahtzee.Game.MLAgent
             // observe potential scores
             for (int i = 1; i < 14; i++)
             {
-                AddVectorObs(_game.GetCell(i).EvaluateScore(_game.Hand, _game.Gameboard)); // 13
+                AddVectorObs(_game.GetCell(i).EvaluateScore(_game.Hand, _game.Gameboard, true)); // 13
             }
+            // evaluate bonus section??
+
+
             AddVectorObs(_game.CanRoll());
             AddVectorObs(_game.CanToggle());
             AddVectorObs(_game.Hand.RollCount);
+            AddVectorObs(_game.Hand.IsYahtzee());
             AddVectorObs(_game.Gameboard.ShouldHaveYahtzeeBonus()); // 4
 
             // observe section bonus info
             int leftColumnScoreBefore = _game.Gameboard.GetLeftColumnScoreWithoutYahtzeeBonus();
+            AddVectorObs(leftColumnScoreBefore);
             AddVectorObs((float)leftColumnScoreBefore / Gameboard.SectionBonusThreshold);
             AddVectorObs(_game.Gameboard.HasSectionBonus);
 
@@ -191,7 +201,7 @@ namespace Yahtzee.Game.MLAgent
             //float highestPossible = _game.Gameboard.ShouldHaveYahtzeeBonus() ? 80.0f : 50.0f;
             //float sectionBonusPercentage = (float) scoreGainedInLeftColumnWithoutYahtzeeBonus / Gameboard.SectionBonusThreshold *
             //    Gameboard.SectionBonus;
-            float normalizedReward = scoreCurrentTurn / 50.0f;
+            float normalizedReward = scoreCurrentTurn / 80.0f;
             SetReward(normalizedReward);
             Logger.Log(LogLevel.Debug, "normalizedReward:" + normalizedReward);
             if (_game.IsGameOver()) // gameover

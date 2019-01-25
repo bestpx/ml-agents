@@ -2,7 +2,7 @@ namespace Yahtzee.Game.Common.GameCells
 {
     public class YahtzeeCell : GameCell
     {
-        public override int EvaluateScore(Hand hand, Gameboard gameboard)
+        public override int EvaluateScore(Hand hand, Gameboard gameboard, bool includeSectionBonus)
         {
             return hand.IsYahtzee() ? gameboard.YahtzeeBonus : 0;
         }

@@ -4,7 +4,7 @@ namespace Yahtzee.Game.Common.GameCells
     {
         public const int SmallStraightValue = 30;
         
-        public override int EvaluateScore(Hand hand, Gameboard gameboard)
+        public override int EvaluateScore(Hand hand, Gameboard gameboard, bool includeSectionBonus)
         {
             int value = 0;
 
